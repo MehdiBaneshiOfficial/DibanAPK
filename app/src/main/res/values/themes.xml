@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.Diban" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="colorAccent">@color/blue</item>
+    </style>
+</resources>

@@ -1,0 +1,1 @@
+-keep class ir.diban.android.vpn.TProxyService { *; }

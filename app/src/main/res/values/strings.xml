@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">دیبان</string>
+    <string name="notif_channel">وضعیت اتصال</string>
+    <string name="notif_connecting">در حال اتصال</string>
+    <string name="notif_connected_vpn">اینترنت آزاد وصل است</string>
+    <string name="notif_connected_proxy">پراکسی محلی فعال است</string>
+    <string name="notif_disconnect">قطع اتصال</string>
+    <string name="st_starting">در حال راه‌اندازی</string>
+    <string name="st_tunnel">در حال ساخت اتصال وی‌پی‌ان</string>
+    <string name="st_probe">در حال آزمایش اتصال</string>
+    <string name="st_ok_vpn">اینترنت آزاد وصل است ✓\nمرورگر را یک بار ببندید و دوباره باز کنید</string>
+    <string name="st_ok_proxy">پراکسی محلی فعال است ✓\nآن را در تنظیمات وای‌فای یا تلگرام وارد کنید</string>
+    <string name="st_probe_failed">وصل شد اما سرور گوگل شما پاسخ نداد</string>
+    <string name="st_failed">اتصال ناموفق بود\n%1$s</string>
+    <string name="st_disconnected">قطع شد</string>
+    <string name="err_vpn_denied">اجازه‌ی ساخت وی‌پی‌ان داده نشد</string>
+    <string name="err_tunnel">راه‌اندازی تونل ناموفق بود</string>
+</resources>
