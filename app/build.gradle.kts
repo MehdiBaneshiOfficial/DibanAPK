@@ -17,7 +17,7 @@ android {
 
         ndk {
             // Chaquopy + hev-socks5-tunnel are built for these ABIs.
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64")
+            abiFilters += listOf("arm64-v8a", "x86_64")
         }
         externalNativeBuild {
             ndkBuild {
