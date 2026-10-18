@@ -171,7 +171,12 @@ class MainActivity : AppCompatActivity() {
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         // Android only lets the focused app read the clipboard.
-        if (hasFocus) autoPasteDeploymentId()
+        if (hasFocus) {
+            autoPasteDeploymentId()
+            // back from the messenger with a code on the clipboard: offer it right away
+            if (screen == Screen.WIZARD && wizardStep == 0 && !wizardAdd && !welcomeCodeShown &&
+                Bridge.codeInText(clipboardText())) render()
+        }
     }
 
     private fun goBack() {
@@ -250,7 +255,39 @@ class MainActivity : AppCompatActivity() {
     }
 
     // ───────────── wizard ─────────────
+    private var welcomeCodeShown = false
+
+    /** First screen: get the connection code from the PC app (easy); building the relay on the phone is the fallback. */
+    private fun buildWelcome() {
+        content.addView(label("خوش آمدید", 22f, bold = true), lp(top = 20, bottom = 4))
+        content.addView(label("برای شروع به یک کد اتصال از برنامه‌ی دیبان کامپیوتر نیاز دارید", 14f, Palette.MUTED), lp(bottom = 12))
+        val c = card()
+        WizardSteps.PC_CODE_STEPS.forEachIndexed { i, item -> c.addView(stepRow(i + 1, item.text, item.chips)) }
+        c.addView(label(WizardSteps.PC_CODE_WARN, 12.5f, Palette.AMBER), lp(top = 8))
+        content.addView(c)
+
+        val clip = clipboardText()
+        welcomeCodeShown = clip.isNotBlank() && Bridge.codeInText(clip)
+        if (welcomeCodeShown) {
+            content.addView(label("کد اتصال در کلیپ‌بورد پیدا شد", 14f, Palette.GREEN, center = true), lp(top = 16))
+            content.addView(button("ثبت کد و ادامه", Palette.GREEN) {
+                io.execute {
+                    val r = Bridge.importCode(clip)
+                    ui.post {
+                        if (r.ok) { welcomeCodeShown = false; show(Screen.MAIN) } else show(Screen.IMPORT)
+                    }
+                }
+            }, lp(top = 8))
+        } else {
+            content.addView(button("چسباندن کد اتصال", Palette.BLUE) { show(Screen.IMPORT) }, lp(top = 16))
+        }
+        content.addView(link("کد ندارم و می‌خواهم خودم بسازم (سخت‌تر)", Palette.MUTED, 14f) {
+            wizardStep = 1; render()
+        })
+    }
+
     private fun buildWizard() {
+        if (wizardStep == 0 && !wizardAdd) { buildWelcome(); return }
         val steps = WizardSteps.STEPS
         val s = steps[wizardStep]
         val last = wizardStep == steps.lastIndex
@@ -401,7 +438,8 @@ class MainActivity : AppCompatActivity() {
 
     // ───────────── import connection code ─────────────
     private fun buildImport() {
-        content.addView(label("کدی که شخص مورد اعتماد برایتان فرستاده را اینجا بچسبانید", 16f), lp(top = 20, bottom = 10))
+        content.addView(label("کد اتصال را اینجا بچسبانید", 19f, bold = true), lp(top = 20, bottom = 4))
+        content.addView(label("کد را از برنامه‌ی دیبان کامپیوتر می‌گیرید و آن از بیشتر و کپی کد اتصال برای گوشی ساخته می‌شود", 13f, Palette.MUTED), lp(bottom = 10))
         val e = input("MHR1-…")
         val clip = clipboardText()
         if (clip.isNotBlank() && Bridge.codeInText(clip)) e.setText(clip)
